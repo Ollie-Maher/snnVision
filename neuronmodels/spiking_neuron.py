@@ -6,8 +6,16 @@ from .neuron_general import Neuron
 
 
 class SpikeNeuron(Neuron):
+    '''
+    Spiking neuron class.
+
+    Inherits from Neuron. Processes inputs as a Leaky Intergrate-and-Fire neuron.
+    Calls spike() function of recipient synapses.
+    '''
     
-    def __init__ (self, id: int, input_synapses: np.ndarray, output_synapses: np.ndarray):
+    def __init__ (self, id: int,
+                  input_synapses: np.ndarray,
+                  output_synapses: np.ndarray):
         super().__init__(id, input_synapses, output_synapses)
         self.mem_pot = self.resting_pot
         self.spiked = False
@@ -19,18 +27,19 @@ class SpikeNeuron(Neuron):
         self.conductance = np.sum(inputs) * (self.reversal_pot - self.mem_pot)
 
     def _potential(self):
-        self.mem_pot = (self.mem_pot - self.resting_pot) * self.mem_pot_delta + self.resting_pot  + (self.resistance * self.conductance)
+        self.mem_pot = ((self.mem_pot - self.resting_pot) * self.mem_pot_delta
+                        + self.resting_pot
+                        + (self.resistance * self.conductance))
         if self.mem_pot > self.threshold:
             self._spike()
 
     def _spike(self):
         self.mem_pot = self.resting_pot
         self.spiked = True
-
-        for synapse in self.output_synapses:
-            synapse.spike()
-        for synpase in self.input_synapses:
-            synapse.backprop()
+        for out_synapse in self.output_synapses:
+            out_synapse.spike()
+        for in_synapse in self.input_synapses:
+            in_synapse.backprop()
 
     def step(self):
         self._input_conductance()
@@ -42,7 +51,21 @@ class SpikeNeuron(Neuron):
         elif self.spiketime < self.period:
             self.spiketime += 1
 
-            
+    class interpretter():
+        def __init__(self):
+            self.spiking = bool()
+            self.just_spiked = bool()
+                
+        def spike(self):
+            self.spiking = True
+        
+        # Weird system is required as neuron.step(), which calls synapse.spike(),
+        # is called before synapse.step()
+        def step(self):
+            if self.spiking:
+                self.just_spiked = True
+            elif self.just_spiked:
+                self.spiking = False
 
         
 
