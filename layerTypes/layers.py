@@ -113,7 +113,7 @@ class fully_connected_layer(layer):
 class final_layer(layer):
     def __init__(self, layer_size: int,
                  neuron_type: Neuron,
-                 input_synapses: function):
+                 input_synapses: np.ndarray):
         '''
         Generates instance of a final layer.
 
@@ -128,7 +128,7 @@ class final_layer(layer):
         super().__init__(layer_size, None, neuron_type, None, input_synapses)
         
     def _setup_synapses(self, type): # Function which makes neuron of type interpretter
-        interpretters = np.empty(self.layer_size, dtype= type)
+        interpretters = np.empty(self.layer_size, dtype = type)
         for i in range(self.layer_size):
             interpretters[i] = type(i)
         return interpretters
