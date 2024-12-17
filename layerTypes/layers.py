@@ -21,7 +21,7 @@ class layer():
                 next_layer_size: int,
                 neuron_type: Neuron,
                 synapse_type: Synapse,
-                input_synapses: function):
+                input_synapses: np.ndarray):
         '''
         Generates instance of a layer
 
@@ -29,13 +29,13 @@ class layer():
         next_layer_size: int; Neurons in target layer
         neuron_type: Neuron; type of Neuron this layer will be constructed from
         synapse_type: Synapse; type of Synapse between this layer and target layer
-        input_synapses: func; instance of get_input_synapses() from previous layer
+        input_synapses: array; array of synapses from previous layer
         '''
         self.layer_size = layer_size
         self.next_layer_size = next_layer_size
         self.neuron_type = neuron_type
         self.synapse_type = synapse_type
-        self._setup_neurons(input_synapses())
+        self._setup_neurons(input_synapses)
 
     @staticmethod
     def _setup_synapses(count, synapse_type: Synapse, rng: np.random.Generator) -> np.ndarray:
@@ -73,7 +73,7 @@ class fully_connected_layer(layer):
                 next_layer_size: int,
                 neuron_type: Neuron,
                 synapse_type: Synapse,
-                input_synapses: function,
+                input_synapses: np.ndarray,
                 rng: np.random.Generator):
         '''
         Generates instance of a fully connected layer
@@ -82,7 +82,7 @@ class fully_connected_layer(layer):
         next_layer_size: int; Neurons in target layer
         neuron_type: Neuron; type of Neuron this layer will be constructed from
         synapse_type: Synapse; type of Synapse between this layer and target layer
-        input_synapses: func; instance of get_input_synapses() from previous layer
+        input_synapses: array; array of synapses from previous layer
         rng: np.random.Generator; random number generator inherited by all synapses
         '''
         self.synapses = self._setup_synapses(layer_size * next_layer_size, synapse_type, rng)
