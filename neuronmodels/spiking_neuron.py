@@ -20,14 +20,14 @@ class SpikeNeuron(Neuron):
         self.mem_pot = self.resting_pot
         self.spiked = False
         self.period = int(self.refractory_period/self.timestep)
-        self.spiketime = 0
+        self.spiketime = self.period
     
     def _input_conductance(self):
         inputs = [x.g for x in self.input_synapses]
         self.conductance = np.sum(inputs) * (self.reversal_pot - self.mem_pot)
 
     def _potential(self):
-        self.mem_pot = ((self.mem_pot - self.resting_pot) * self.mem_pot_delta
+        self.mem_pot = (((self.mem_pot - self.resting_pot) * self.mem_pot_delta)
                         + self.resting_pot
                         + (self.resistance * self.conductance))
         if self.mem_pot > self.threshold:
@@ -53,8 +53,8 @@ class SpikeNeuron(Neuron):
 
     class interpretter():
         def __init__(self):
-            self.spiking = bool()
-            self.just_spiked = bool()
+            self.spiking = False
+            self.just_spiked = False
                 
         def spike(self):
             self.spiking = True
@@ -62,10 +62,11 @@ class SpikeNeuron(Neuron):
         # Weird system is required as neuron.step(), which calls synapse.spike(),
         # is called before synapse.step()
         def step(self):
-            if self.spiking:
-                self.just_spiked = True
-            elif self.just_spiked:
+            if self.just_spiked:
                 self.spiking = False
+                self.just_spiked = False
+            elif self.spiking:
+                self.just_spiked = True
 
         
 

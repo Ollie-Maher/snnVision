@@ -14,7 +14,7 @@ class Neuron:
     resting_pot = -0.074
     threshold = -0.050
     resistance = 0.04
-    refractory_period = 2
+    refractory_period = 20
     reversal_pot = 0
     timestep = 0.2
 

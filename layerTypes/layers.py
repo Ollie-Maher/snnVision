@@ -124,13 +124,13 @@ class final_layer(layer):
         neuron_type: Neuron; type of Neuron this layer will be constructed from
         input_synapses: func; instance of get_input_synapses() from previous layer
         '''
-        self.synapses = self._setup_synapses(neuron_type.interpretter)
+        self.synapses = self._setup_synapses(layer_size, neuron_type.interpretter)
         super().__init__(layer_size, None, neuron_type, None, input_synapses)
         
-    def _setup_synapses(self, type): # Function which makes neuron of type interpretter
-        interpretters = np.empty(self.layer_size, dtype = type)
-        for i in range(self.layer_size):
-            interpretters[i] = type(i)
+    def _setup_synapses(self, layer_size, n_type): # Function which makes neuron of type interpretter
+        interpretters = np.empty(layer_size, dtype = n_type)
+        for i in range(layer_size):
+            interpretters[i] = n_type()
         return interpretters
 
     def _get_output_synapses(self): # Function establishes 1:1 neuron to interpretter

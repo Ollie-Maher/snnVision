@@ -19,7 +19,7 @@ class Synapse:
 
     nt_delta = np.exp((-timestep / nt_decay))
     receptor_delta = np.exp((-timestep / receptor_decay))
-    conductance_delta  = np.exp((-timestep / conductance_decay))
+    conductance_delta = np.exp((-timestep / conductance_decay))
 
     def __init__(self, id, rng):
         self.id = id
