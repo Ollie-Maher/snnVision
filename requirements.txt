@@ -1,0 +1,8 @@
+numpy
+matplotlib
+keras
+torch
+torchvision
+
+# possible use for data analysis
+pandas
