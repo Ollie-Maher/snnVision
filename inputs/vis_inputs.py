@@ -1,7 +1,7 @@
 '''
 This file loads visual data for the basic interpreter
 '''
-from keras import mnist
+from keras.datasets import mnist
 
 
 class mnist_data:
@@ -15,16 +15,15 @@ class mnist_data:
             image = None,
             label = None
         )
-        img_sampler = getattr(mnist_data, f'{"test" if test_set else "train"}_imgs')
-        label_sampler = getattr(mnist_data, f'{"test" if test_set else "train"}_labels')
         if img:
-            return_set['image'] = img_sampler(self, self.id)
+            return_set['image'] = getattr(self, f'{"test" if test_set else "train"}_imgs')
         if lbl:
-            return_set['label'] = label_sampler(self, self.id)
+            return_set['label'] = getattr(self, f'{"test" if test_set else "train"}_labels')
         self.id += 1
         return return_set
+    
+    def get_set(self, count, **kwargs):
+        sample = []
+        for i in range(count):
+            sample.append(self.get_next(**kwargs))
 
-a = mnist_data()
-
-print(a.get_next())
-print(a.get_next(test_set=True))

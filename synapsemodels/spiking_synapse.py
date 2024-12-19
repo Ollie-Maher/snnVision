@@ -34,5 +34,3 @@ class SpikeSyn(Synapse):
         self._transmitter()
         self._receptor()
         self._conductance()
-
-    
